@@ -1,2 +1,2 @@
-# Clustering_Bank
-Analisis Clustering Bank
+# Analisis Clustering Bank
+Group Pengelolaan Data dan Statistik (GPDS)
