@@ -27,13 +27,9 @@ def clustering(list_df):
     list_of_cluster.append(cluster_name)
 
   df_cluster = pd.concat(list_df_cluster, axis=1)
-  
   cols = list_of_letter
-  
   df_cluster["Fuzzy"] = df_cluster[cols].apply(lambda row: ''.join(row.values.astype(str)), axis=1)
-
   list_of_cluster.append('Fuzzy')
-
   df_cluster = df_cluster[list_of_cluster]
   
   return df_cluster
@@ -43,4 +39,3 @@ def calculate_fuzzy(a, b):
   s.set_seqs(a, b)
   
   return s.ratio()
-
