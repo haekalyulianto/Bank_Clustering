@@ -24,6 +24,7 @@ selected = option_menu(
 # Data Clustering Bank
 if selected == "Data Clustering Bank":
 
+    # Praproses Data
     df = pd.read_excel('datacluster.xlsx')
     df.rename(columns = {'no':'Bank'}, inplace = True)
     df = df.set_index('Bank')
@@ -76,6 +77,7 @@ if selected == "Data Clustering Bank":
     df_tsd['Tagihan SD'] = df_tsd.mean(axis=1)
     df_tsd = df_tsd[['Tagihan SD']]
 
+    # Dictionary Variabel
     dict_pos = {
     'Kredit': df_kredit,
     'Giro': df_giro,
@@ -89,30 +91,38 @@ if selected == "Data Clustering Bank":
     'Tagihan atas Surat Berharga yang Dibeli dengan Janji Dijual Kembali': df_trrepo,
     'Tagihan Spot dan Derivatif': df_tsd}   
 
+    # Konfigurasi Sidebar
     st.sidebar.image("LPS.png", output_format='PNG')
     options = st.sidebar.multiselect('Variabel :', ['Kredit', 'Giro','Penempatan BI', 'Penempatan Bank Lain', 'Simpanan Berjangka', 'Surat Berharga', 'Surat Berharga yang Dijual dengan Janji Dibeli Kembali', 'Tabungan', 'Tagihan Akseptasi', 'Tagihan atas Surat Berharga yang Dibeli dengan Janji Dijual Kembali', 'Tagihan Spot dan Derivatif'], ['Kredit', 'Giro','Penempatan BI', 'Simpanan Berjangka', 'Surat Berharga', 'Tabungan', 'Surat Berharga yang Dijual dengan Janji Dibeli Kembali'])
     
     if st.sidebar.button('Run'):
         
+        # Tabel Data Awal
         st.header("Hasil Analisis Clustering Bank")
-        st.success("Tabel Clustering Bank")
+        st.success("Tabel Data Awal")
+        st.dataframe(df)    
 
         pilihan = []
         for input in options:
             pilihan.append(dict_pos[input])
         
         df_bank = util.clustering(pilihan)
+        
+        # Tabel Hasil Clustering Bank
+        st.success("Tabel Hasil Clustering Bank")
         st.dataframe(df_bank)
         
-        # Initialize Matrix
+        # Inisialisasi Matriks antar Bank
         df_matrix_fuzzy = pd.DataFrame(index=list(df_bank['Fuzzy']), columns=list(df_bank['Fuzzy']))
         
         list_fuzzy = list(df_bank['Fuzzy'])
-
+        
+        # Hitung Skor Kecocokan antar Bank dengan Fuzzy 
         for fuzz1 in list_fuzzy:
             for fuzz2 in list_fuzzy:
                 df_matrix_fuzzy.loc[fuzz1, fuzz2] = util.calculate_fuzzy(fuzz1, fuzz2)  
 
+        # Membuat Data Matriks Kecocokan antar Bank
         df_matrix_fuzzy_bank = pd.DataFrame(df_matrix_fuzzy.to_numpy(), index=[str(i) for i in list(df_bank.index)], columns=[str(i) for i in list(df_bank.index)])
         df_matrix_fuzzy_bank = df_matrix_fuzzy_bank.astype(float)
         df_matrix_fuzzy_bank.to_excel('df_matrix_fuzzy_bank.xlsx', index=True)
@@ -120,31 +130,32 @@ if selected == "Data Clustering Bank":
 # Data Kecocokan Bank
 if selected == "Data Kecocokan Bank":
 
+    # Konfigurasi Sidebar
     st.sidebar.image("LPS.png", output_format='PNG')
     st.header("Hasil Analisis Kecocokan Bank")
-    
-    
+     
+    # Ambil Data
     df_matrix_fuzzy_bank = pd.read_excel('df_matrix_fuzzy_bank.xlsx', index_col=0)
     df_matrix_fuzzy_bank = df_matrix_fuzzy_bank.astype(float)
     
+    # Data Matriks Kecocokan antar Bank
     st.success("Matriks Kecocokan antar Bank")
     st.dataframe(df_matrix_fuzzy_bank)
 
     namabank = []
     value = []
     
+    # Mengubah Tipe Data Index
     df_matrix_fuzzy_bank.index = df_matrix_fuzzy_bank.index.map(str)
 
+    # Mencari Bank Serupa berdasarkan Nilai Kecocokan
     for bank in list(df_matrix_fuzzy_bank.index):
         dftemp = df_matrix_fuzzy_bank.loc[bank, df_matrix_fuzzy_bank.columns != bank]
         value.append(dftemp.max())
         namabank.append(dftemp.idxmax())
     
-    df_bank_nearest = pd.DataFrame({'Bank Terdekat': namabank, 'Nilai Kecocokan': value}, index=list(df_matrix_fuzzy_bank.index))
+    df_bank_nearest = pd.DataFrame({'Bank Serupa': namabank, 'Nilai Kecocokan': value}, index=list(df_matrix_fuzzy_bank.index))
     
+    # Tabel Kecocokan Bank
     st.success("Tabel Kecocokan Bank")
     st.dataframe(df_bank_nearest)
-
-
-
-
