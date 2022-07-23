@@ -1,3 +1,4 @@
+from numpy import NaN
 import pandas as pd
 import warnings
 warnings.simplefilter(action='ignore')
@@ -133,7 +134,8 @@ if selected == "Data Kecocokan Bank":
     # Konfigurasi Sidebar
     st.sidebar.image("LPS.png", output_format='PNG')
     st.header("Hasil Analisis Kecocokan Bank")
-     
+    threshold = st.sidebar.number_input('Minimum Nilai Kecocokan : ', value = 0.7, step = 0.05)
+    
     # Ambil Data
     df_matrix_fuzzy_bank = pd.read_excel('df_matrix_fuzzy_bank.xlsx', index_col=0)
     df_matrix_fuzzy_bank = df_matrix_fuzzy_bank.astype(float)
@@ -151,11 +153,16 @@ if selected == "Data Kecocokan Bank":
     # Mencari Bank Serupa berdasarkan Nilai Kecocokan
     for bank in list(df_matrix_fuzzy_bank.index):
         dftemp = df_matrix_fuzzy_bank.loc[bank, df_matrix_fuzzy_bank.columns != bank]
-        value.append(dftemp.max())
-        namabank.append(dftemp.idxmax())
+    
+        if dftemp.max() >= threshold:
+            value.append(dftemp.max())
+            namabank.append(dftemp.idxmax())
+        else:
+            value.append(NaN)
+            namabank.append(NaN)
     
     df_bank_nearest = pd.DataFrame({'Bank Serupa': namabank, 'Nilai Kecocokan': value}, index=list(df_matrix_fuzzy_bank.index))
     
     # Tabel Kecocokan Bank
-    st.success("Tabel Kecocokan Bank")
+    st.success("Bank Serupa dengan Minimum Nilai Kecocokan " + str(round(threshold, 2)))
     st.dataframe(df_bank_nearest)
