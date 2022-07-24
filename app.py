@@ -101,7 +101,9 @@ if selected == "Data Clustering Bank":
         # Tabel Data Awal
         st.header("Hasil Analisis Clustering Bank")
         st.success("Tabel Data Awal")
-        st.dataframe(df)    
+        st.dataframe(df)  
+        st.dataframe(df_giro)
+        st.dataframe(df_tsd)
 
         pilihan = []
         for input in options:
