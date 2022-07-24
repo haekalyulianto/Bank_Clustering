@@ -164,5 +164,5 @@ if selected == "Data Kecocokan Bank":
     df_bank_nearest = pd.DataFrame({'Bank Serupa': namabank, 'Nilai Kecocokan': value}, index=list(df_matrix_fuzzy_bank.index))
     
     # Tabel Kecocokan Bank
-    st.success("Bank Serupa dengan Minimum Nilai Kecocokan " + str(round(threshold, 2)))
+    st.success("Bank Serupa dengan Minimum Nilai Kecocokan : " + str(round(threshold, 2)))
     st.dataframe(df_bank_nearest)
