@@ -31,6 +31,7 @@ if selected == "Data Clustering Bank":
     df = df.set_index('Bank')
 
     df_giro = df.iloc[:, 0:7:1]
+    st.dataframe(df_giro)
     df_giro['Giro'] = df_giro.mean(axis=1)
     df_giro = df_giro[['Giro']]
 
@@ -75,6 +76,7 @@ if selected == "Data Clustering Bank":
     df_trrepo = df_trrepo[['Tagihan RREPO']]
 
     df_tsd = df.iloc[:, -6::1]
+    st.dataframe(df_tsd)
     df_tsd['Tagihan SD'] = df_tsd.mean(axis=1)
     df_tsd = df_tsd[['Tagihan SD']]
 
@@ -102,8 +104,6 @@ if selected == "Data Clustering Bank":
         st.header("Hasil Analisis Clustering Bank")
         st.success("Tabel Data Awal")
         st.dataframe(df)  
-        st.dataframe(df_giro)
-        st.dataframe(df_tsd)
 
         pilihan = []
         for input in options:
