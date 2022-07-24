@@ -30,51 +30,51 @@ if selected == "Data Clustering Bank":
     df.rename(columns = {'no':'Bank'}, inplace = True)
     df = df.set_index('Bank')
 
-    df_giro = df.loc[:, 1:6:1]
+    df_giro = df.iloc[:, 0:7:1]
     df_giro['Giro'] = df_giro.mean(axis=1)
     df_giro = df_giro[['Giro']]
 
-    df_kas = df.loc[:, 7:12:1]
+    df_kas = df.iloc[:, 7:13:1]
     df_kas['Kas'] = df_kas.mean(axis=1)
     df_kas = df_kas[['Kas']]
 
-    df_kredit = df.loc[:, 13:18:1]
+    df_kredit = df.iloc[:, 13:19:1]
     df_kredit['Kredit'] = df_kredit.mean(axis=1)
     df_kredit = df_kredit[['Kredit']]
 
-    df_pbi = df.loc[:, 19:24:1]
+    df_pbi = df.iloc[:, 19:25:1]
     df_pbi['PBI'] = df_pbi.mean(axis=1)
     df_pbi = df_pbi[['PBI']]
 
-    df_pbl = df.loc[:, 25:30:1]
+    df_pbl = df.iloc[:, 25:31:1]
     df_pbl['PBL'] = df_pbl.mean(axis=1)
     df_pbl = df_pbl[['PBL']]
 
-    df_sberj = df.loc[:, 31:36:1]
+    df_sberj = df.iloc[:, 31:37:1]
     df_sberj['SBERJ'] = df_sberj.mean(axis=1)
     df_sberj = df_sberj[['SBERJ']]
 
-    df_sb = df.loc[:, 37:42:1]
+    df_sb = df.iloc[:, 37:43:1]
     df_sb['SB'] = df_sb.mean(axis=1)
     df_sb = df_sb[['SB']]
 
-    df_rrepo = df.loc[:, 43:48:1]
+    df_rrepo = df.iloc[:, 43:49:1]
     df_rrepo['RREPO'] = df_rrepo.mean(axis=1)
     df_rrepo = df_rrepo[['RREPO']]
 
-    df_tab = df.loc[:, 49:54:1]
+    df_tab = df.iloc[:, 49:55:1]
     df_tab['Tabungan'] = df_tab.mean(axis=1)
     df_tab = df_tab[['Tabungan']]
 
-    df_ta = df.loc[:, 55:60:1]
+    df_ta = df.iloc[:, 55:61:1]
     df_ta['Tagihan Akseptasi'] = df_ta.mean(axis=1)
     df_ta = df_ta[['Tagihan Akseptasi']]
 
-    df_trrepo = df.loc[:, 61:66:1]
+    df_trrepo = df.iloc[:, 61:67:1]
     df_trrepo['Tagihan RREPO'] = df_trrepo.mean(axis=1)
     df_trrepo = df_trrepo[['Tagihan RREPO']]
 
-    df_tsd = df.loc[:, 67:72:1]
+    df_tsd = df.iloc[:, -6::1]
     df_tsd['Tagihan SD'] = df_tsd.mean(axis=1)
     df_tsd = df_tsd[['Tagihan SD']]
 
