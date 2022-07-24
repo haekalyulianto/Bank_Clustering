@@ -52,7 +52,6 @@ if selected == "Data Clustering Bank":
 
     df_sberj = df.iloc[:, 30:36:1]
     df_sberj['SBERJ'] = df_sberj.mean(axis=1)
-    st.dataframe(df_sberj)
     df_sberj = df_sberj[['SBERJ']]
 
     df_sb = df.iloc[:, 36:42:1]
