@@ -31,7 +31,6 @@ if selected == "Data Clustering Bank":
     df = df.set_index('Bank')
 
     df_giro = df.iloc[:, 0:6:1]
-    st.dataframe(df_giro)
     df_giro['Giro'] = df_giro.mean(axis=1)
     df_giro = df_giro[['Giro']]
 
@@ -53,6 +52,7 @@ if selected == "Data Clustering Bank":
 
     df_sberj = df.iloc[:, 30:36:1]
     df_sberj['SBERJ'] = df_sberj.mean(axis=1)
+    st.dataframe(df_sberj)
     df_sberj = df_sberj[['SBERJ']]
 
     df_sb = df.iloc[:, 36:42:1]
@@ -76,7 +76,6 @@ if selected == "Data Clustering Bank":
     df_trrepo = df_trrepo[['Tagihan RREPO']]
 
     df_tsd = df.iloc[:, -6::1]
-    st.dataframe(df_tsd)
     df_tsd['Tagihan SD'] = df_tsd.mean(axis=1)
     df_tsd = df_tsd[['Tagihan SD']]
 
