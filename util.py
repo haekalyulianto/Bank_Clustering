@@ -2,6 +2,7 @@ from sklearn.cluster import KMeans
 import numpy as np
 import pandas as pd
 from difflib import SequenceMatcher
+import plotly.graph_objs as go
 
 def clustering(list_df):
   list_df_cluster = []
@@ -39,3 +40,42 @@ def calculate_fuzzy(a, b):
   s.set_seqs(a, b)
   
   return s.ratio()
+
+def plot(bank1, bank2, df):
+  layout = go.Layout(paper_bgcolor='rgba(229,236,246,0)', plot_bgcolor='rgba(229,236,246,100)')
+
+  df = df.loc[(df['no'] == bank1) | (df['no'] == bank2)]
+  df = df.set_index('no')
+  df2 = df.T
+
+  fig = go.Figure(layout=layout)
+
+  x_axis = [x for x in range(1,len(df2)+1)]
+
+  fig.add_trace(
+    go.Scatter(
+      x=x_axis, 
+      y=df2[bank1], 
+      marker=dict(color="red"), 
+      name='Bank '+str(bank1), 
+      mode='markers',
+      text=df2.index
+    )
+  )
+
+  fig.add_trace(
+    go.Scatter(
+      x=x_axis, 
+      y=df2[bank2], 
+      marker=dict(color="blue"), 
+      name='Bank '+str(bank2), 
+      mode='markers',
+      text=df2.index
+    )
+  )
+
+  fig.update_traces(marker_size=6)
+  fig.update_layout(height=540)
+  fig.update_layout(width=960)
+
+  return fig
