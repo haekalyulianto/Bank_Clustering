@@ -166,3 +166,23 @@ if selected == "Data Kecocokan Bank":
     # Tabel Kecocokan Bank
     st.success("Bank Serupa dengan Minimum Nilai Kecocokan : " + str(round(threshold, 2)))
     st.dataframe(df_bank_nearest)
+
+    # Scatter Plot
+    st.success("Visualisasi Kesesuaian")
+    df = pd.read_excel('datacluster.xlsx')
+
+    col1, col2 = st.columns(2)
+    with col1:
+        bank1 = st.selectbox(
+            'Pilih Kode Bank Pertama',
+            (df['no'])
+        )
+
+    with col2:
+        bank2 = st.selectbox(
+            'Pilih Kode Bank Kedua',
+            (df['no'])
+        )
+    
+    if st.button('Tampilkan'):
+        st.write(util.plot(bank1, bank2, df))
