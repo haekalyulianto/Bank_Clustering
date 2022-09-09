@@ -94,7 +94,7 @@ if selected == "Data Clustering Bank":
 
     # Konfigurasi Sidebar
     st.sidebar.image("LPS.png", output_format='PNG')
-    options = st.sidebar.multiselect('Variabel :', ['Kredit', 'Giro','Penempatan BI', 'Penempatan Bank Lain', 'Simpanan Berjangka', 'Surat Berharga', 'Surat Berharga yang Dijual dengan Janji Dibeli Kembali', 'Tabungan', 'Tagihan Akseptasi', 'Tagihan atas Surat Berharga yang Dibeli dengan Janji Dijual Kembali', 'Tagihan Spot dan Derivatif'], ['Kredit', 'Giro','Penempatan BI', 'Simpanan Berjangka', 'Surat Berharga', 'Tabungan', 'Surat Berharga yang Dijual dengan Janji Dibeli Kembali'])
+    options = st.sidebar.multiselect('Variabel :', ['Kredit', 'Giro','Penempatan BI', 'Penempatan Bank Lain', 'Simpanan Berjangka', 'Surat Berharga', 'Surat Berharga yang Dijual dengan Janji Dibeli Kembali', 'Tabungan', 'Tagihan Akseptasi', 'Tagihan atas Surat Berharga yang Dibeli dengan Janji Dijual Kembali', 'Tagihan Spot dan Derivatif'], ['Kredit', 'Giro','Penempatan BI', 'Penempatan Bank Lain', 'Simpanan Berjangka', 'Surat Berharga', 'Surat Berharga yang Dijual dengan Janji Dibeli Kembali', 'Tabungan', 'Tagihan Akseptasi', 'Tagihan atas Surat Berharga yang Dibeli dengan Janji Dijual Kembali', 'Tagihan Spot dan Derivatif'])
     
     if st.sidebar.button('Run'):
         
