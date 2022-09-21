@@ -19,14 +19,14 @@ if auth.check_password():
     # Konfigurasi Pilihan Menu
     selected = option_menu(
         menu_title=None,
-        options=["Data Clustering Bank Neraca", "Data Kecocokan Bank Neraca", "Data Clustering Bank Kredit", "Data Kecocokan Bank Kredit"],
+        options=["Clustering Neraca", "Kecocokan Neraca", "Clustering Kredit", "Kecocokan Kredit"],
         icons=["pie-chart","cart-check","pie-chart","cart-check"],
         menu_icon="cast",
         default_index=0,
         orientation="horizontal")
 
     # Data Clustering Bank
-    if selected == "Data Clustering Bank":
+    if selected == "Clustering Neraca":
 
         # Praproses Data
         df = db.get_data()
@@ -102,7 +102,7 @@ if auth.check_password():
         if st.sidebar.button('Run'):
             
             # Tabel Data Awal
-            st.header("Hasil Analisis Clustering Bank")
+            st.header("Hasil Analisis Clustering Neraca")
             st.success("Tabel Data Awal")
             st.dataframe(df)  
 
@@ -132,11 +132,11 @@ if auth.check_password():
             df_matrix_fuzzy_bank.to_excel('df_matrix_fuzzy_bank.xlsx', index=True)
 
     # Data Kecocokan Bank
-    if selected == "Data Kecocokan Bank":
+    if selected == "Kecocokan Neraca":
 
         # Konfigurasi Sidebar
         st.sidebar.image("LPS.png", output_format='PNG')
-        st.header("Hasil Analisis Kecocokan Bank")
+        st.header("Hasil Analisis Kecocokan Neraca")
         threshold = st.sidebar.number_input('Minimum Nilai Kecocokan : ', value = 0.7, step = 0.05)
         
         # Ambil Data
@@ -191,7 +191,7 @@ if auth.check_password():
             st.write(util.plot(bank1, bank2, df))
 
     # Data Clustering Bank Kredit
-    if selected == "Data Clustering Bank Kredit":
+    if selected == "Clustering Kredit":
 
         ClusterKredit_202208 = pd.read_csv('ClusterKredit_202208.csv')
 
@@ -257,7 +257,7 @@ if auth.check_password():
         if st.sidebar.button('Run'):
             
             # Tabel Data Awal
-            st.header("Hasil Analisis Clustering Bank")
+            st.header("Hasil Analisis Clustering Kredit")
             st.success("Tabel Data Awal")
             st.dataframe(df)  
 
@@ -285,3 +285,63 @@ if auth.check_password():
             df_matrix_fuzzy_bank = pd.DataFrame(df_matrix_fuzzy.to_numpy(), index=[str(i) for i in list(df_bank.index)], columns=[str(i) for i in list(df_bank.index)])
             df_matrix_fuzzy_bank = df_matrix_fuzzy_bank.astype(float)
             df_matrix_fuzzy_bank.to_excel('df_matrix_fuzzy_bank.xlsx', index=True)
+            
+            # Data Kecocokan Bank
+    if selected == "Kecocokan Kredit":
+
+        # Konfigurasi Sidebar
+        st.sidebar.image("LPS.png", output_format='PNG')
+        st.header("Hasil Analisis Kecocokan Kredit")
+        threshold = st.sidebar.number_input('Minimum Nilai Kecocokan : ', value = 0.7, step = 0.05)
+        
+        # Ambil Data
+        df_matrix_fuzzy_bank = pd.read_excel('df_matrix_fuzzy_bank.xlsx', index_col=0)
+        df_matrix_fuzzy_bank = df_matrix_fuzzy_bank.astype(float)
+        
+        # Data Matriks Kecocokan antar Bank
+        st.success("Matriks Kecocokan antar Bank")
+        st.dataframe(df_matrix_fuzzy_bank)
+
+        namabank = []
+        value = []
+        
+        # Mengubah Tipe Data Index
+        df_matrix_fuzzy_bank.index = df_matrix_fuzzy_bank.index.map(str)
+
+        # Mencari Bank Serupa berdasarkan Nilai Kecocokan
+        for bank in list(df_matrix_fuzzy_bank.index):
+            dftemp = df_matrix_fuzzy_bank.loc[bank, df_matrix_fuzzy_bank.columns != bank]
+        
+            if dftemp.max() >= threshold:
+                value.append(dftemp.max())
+                namabank.append(dftemp.idxmax())
+            else:
+                value.append(NaN)
+                namabank.append(NaN)
+        
+        df_bank_nearest = pd.DataFrame({'Bank Serupa': namabank, 'Nilai Kecocokan': value}, index=list(df_matrix_fuzzy_bank.index))
+        
+        # Tabel Kecocokan Bank
+        st.success("Bank Serupa dengan Minimum Nilai Kecocokan : " + str(round(threshold, 2)))
+        st.dataframe(df_bank_nearest)
+
+        # Scatter Plot
+        st.success("Visualisasi Kesesuaian")
+        df = pd.read_excel('datacluster.xlsx')
+
+        col1, col2 = st.columns(2)
+        with col1:
+            bank1 = st.selectbox(
+                'Pilih Kode Bank Pertama',
+                (df['no'])
+            )
+
+        with col2:
+            bank2 = st.selectbox(
+                'Pilih Kode Bank Kedua',
+                (df['no'])
+            )
+        
+        if st.button('Tampilkan'):
+            st.write(util.plot(bank1, bank2, df))
+
