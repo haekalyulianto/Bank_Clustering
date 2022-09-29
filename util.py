@@ -41,11 +41,11 @@ def calculate_fuzzy(a, b):
   
   return s.ratio()
 
-def plot(bank1, bank2, df):
+def plot(bank1, bank2, df, kolom):
   layout = go.Layout(paper_bgcolor='rgba(229,236,246,0)', plot_bgcolor='rgba(229,236,246,100)')
 
-  df = df.loc[(df['no'] == bank1) | (df['no'] == bank2)]
-  df = df.set_index('no')
+  df = df.loc[(df[kolom] == bank1) | (df[kolom] == bank2)]
+  df = df.set_index(kolom)
   df2 = df.T
 
   fig = go.Figure(layout=layout)
