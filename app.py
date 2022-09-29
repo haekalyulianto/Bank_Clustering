@@ -7,6 +7,7 @@ import streamlit as st
 import util
 import db
 import auth
+import os
 
 if auth.check_password():
     # Konfigurasi Halaman
@@ -24,7 +25,7 @@ if auth.check_password():
         menu_icon="cast",
         default_index=0,
         orientation="horizontal")
-
+    
     # Data Clustering Bank
     if selected == "Clustering Neraca":
 
@@ -188,15 +189,30 @@ if auth.check_password():
             )
         
         if st.button('Tampilkan'):
-            st.write(util.plot(bank1, bank2, df))
+            st.write(util.plot(bank1, bank2, df, 'no'))
 
     # Data Clustering Bank Kredit
     if selected == "Clustering Kredit":
 
-        ClusterKredit_202208 = pd.read_csv('ClusterKredit_202208.csv')
+         # Konfigurasi Sidebar
+        st.sidebar.image("LPS.png", output_format='PNG')
+
+        list_periode = []
+        for f in os.listdir('.'):
+            if('ClusterKredit' in f):
+                f = f.split('_')
+                f = f[1].split('.')
+                f = f[0]
+                list_periode.append(f)
+        periode = st.sidebar.selectbox('Periode : ', list_periode)
+
+        options = st.sidebar.multiselect('Variabel :', ['Rumah Tangga','Konstruksi','Pertanian','Pertambangan','Industri','Listrik','Air','Perdagangan','Pengangkutan','Akomodasi','IT','Keuangan','Perumahan','Profesional','Penyewaan','Pemerintahan','Pendidikan','Kesehatan','Hiburan','Jasa Lainnya','ART','ABI','Usaha Lainnya'], ['Rumah Tangga','Konstruksi','Pertanian','Pertambangan','Industri','Listrik','Air','Perdagangan','Pengangkutan','Akomodasi','IT','Keuangan','Perumahan','Profesional','Penyewaan','Pemerintahan','Pendidikan','Kesehatan','Hiburan','Jasa Lainnya','ART','ABI','Usaha Lainnya'])
+
+        ClusterKredit = pd.read_csv('ClusterKredit_'+ periode + '.csv')
+        ClusterKredit = ClusterKredit.fillna(0)
 
         # Praproses Data
-        df = ClusterKredit_202208.iloc[:, 1:]
+        df = ClusterKredit.iloc[:, 1:]
         df = df.set_index('KodeBank')
 
         df_rumahtangga = df[['RUMAH TANGGA']]
@@ -211,7 +227,7 @@ if auth.check_password():
         df_akomodasi = df[['PENYEDIAAN AKOMODASI DAN PENYEDIAAN MAKAN MINUM']]
         df_it = df[['INFORMASI DAN KOMUNIKASI']]
         df_keuangan = df[['AKTIVITAS KEUANGAN DAN ASURANSI']]
-        df_perumahan = df[['REAL ESTAT']]
+        df_perumahan = df[['REAL ESTATE']]
         df_profesional = df[['AKTIVITAS PROFESIONAL, ILMIAH DAN TEKNIS']]
         df_penyewaan = df[['AKTIVITAS PENYEWAAN DAN SEWA GUNA USAHA TANPA HAK OPSI, KETENAGAKERJAAN, AGEN PERJALANAN DAN PENUNJANG USAHA LAINNYA']]
         df_pemerintahan = df[['ADMINISTRASI PEMERINTAHAN, PERTAHANAN DAN JAMINAN SOSIAL WAJIB']]
@@ -249,10 +265,6 @@ if auth.check_password():
             'ABI' : df_abi,
             'Usaha Lainnya' : df_usahalainnya
         }  
-
-        # Konfigurasi Sidebar
-        st.sidebar.image("LPS.png", output_format='PNG')
-        options = st.sidebar.multiselect('Variabel :', ['Rumah Tangga','Konstruksi','Pertanian','Pertambangan','Industri','Listrik','Air','Perdagangan','Pengangkutan','Akomodasi','IT','Keuangan','Perumahan','Profesional','Penyewaan','Pemerintahan','Pendidikan','Kesehatan','Hiburan','Jasa Lainnya','ART','ABI','Usaha Lainnya'])
         
         if st.sidebar.button('Run'):
             
@@ -291,6 +303,16 @@ if auth.check_password():
 
         # Konfigurasi Sidebar
         st.sidebar.image("LPS.png", output_format='PNG')
+
+        list_periode = []
+        for f in os.listdir('.'):
+            if('ClusterKredit' in f):
+                f = f.split('_')
+                f = f[1].split('.')
+                f = f[0]
+                list_periode.append(f)
+        periode = st.sidebar.selectbox('Periode : ', list_periode)
+
         st.header("Hasil Analisis Kecocokan Kredit")
         threshold = st.sidebar.number_input('Minimum Nilai Kecocokan : ', value = 0.7, step = 0.05)
         
@@ -327,21 +349,21 @@ if auth.check_password():
 
         # Scatter Plot
         st.success("Visualisasi Kesesuaian")
-        df = pd.read_excel('datacluster.xlsx')
+        df = pd.read_csv('ClusterKredit_' + periode + '.csv')
+        df = df.sort_values(by='KodeBank')
 
         col1, col2 = st.columns(2)
         with col1:
             bank1 = st.selectbox(
                 'Pilih Kode Bank Pertama',
-                (df['no'])
+                (df['KodeBank'])
             )
 
         with col2:
             bank2 = st.selectbox(
                 'Pilih Kode Bank Kedua',
-                (df['no'])
+                (df['KodeBank'])
             )
         
         if st.button('Tampilkan'):
-            st.write(util.plot(bank1, bank2, df))
-
+            st.write(util.plot(bank1, bank2, df, 'KodeBank'))
