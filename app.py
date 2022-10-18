@@ -5,7 +5,7 @@ warnings.simplefilter(action='ignore')
 from streamlit_option_menu import option_menu
 import streamlit as st
 import util
-import db
+# import db
 import auth
 import os
 
